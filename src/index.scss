@@ -1,0 +1,29 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
+}
+
+html {
+	font-size: 62.5%;
+	text-rendering: optimizeLegibility;
+
+	body {
+		width: 100%;
+		height: 100vh;
+		font-size: 1.6rem;
+		letter-spacing: 0.1rem;
+		box-sizing: border-box;
+		font-family: 'Hammersmith One', sans-serif;
+		// -webkit-font-smoothing: antialiased;
+		// -moz-osx-font-smoothing: grayscale;
+
+		#root {
+			position: relative;
+			width: 100%;
+			min-height: 100vh;
+		}
+	}
+}

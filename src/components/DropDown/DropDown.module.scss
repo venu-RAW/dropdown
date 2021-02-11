@@ -1,0 +1,75 @@
+.dropdown {
+	width: 40%;
+	height: 60%;
+	color: #333;
+	cursor: default;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	.control {
+		position: relative;
+	}
+
+	.arrow {
+		cursor: pointer;
+
+		i {
+			color: #999;
+			display: block;
+			position: absolute;
+			right: 2rem;
+			top: 1.2rem;
+
+			&.up {
+				position: absolute;
+				right: 2rem;
+				top: 1.8rem;
+			}
+		}
+	}
+
+	.selectedValue {
+		width: 100%;
+		height: 4.5rem;
+		font-size: 1.8rem;
+		color: rgba(51, 51, 51, 0.8);
+		background-color: #fff;
+		border: 2px solid #ccc;
+		line-height: 1.5;
+		border-radius: 2px;
+		cursor: default;
+		outline: none;
+		padding: 0.8rem 5.2rem 0.8rem 1.8rem;
+		transition: all 200ms ease;
+
+		p {
+			white-space: nowrap;
+			overflow: hidden;
+		}
+	}
+
+	.options {
+		margin-top: 1rem;
+		border: 2px solid #ccc;
+		box-sizing: border-box;
+		max-height: 28rem;
+		overflow-y: scroll;
+		padding: 0.8rem;
+		--webkit-overflow-scrolling: touch;
+
+		.option {
+			box-sizing: border-box;
+			color: rgba(51, 51, 51, 0.8);
+			cursor: pointer;
+			display: block;
+			padding: 8px 10px;
+
+			&:hover {
+				background-color: #f2f9fc;
+				color: #333;
+			}
+		}
+	}
+}
