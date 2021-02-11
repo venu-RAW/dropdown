@@ -164,7 +164,7 @@ DropDown.defaultProps = {
  * This configuration object takes a key of handleCLickOutside which is set as a function that is been created  * before with the same name. This funciton is used for the processing of the outside the component click events.
  */
 const outsideClickConfig = {
-	handleClickOutide: () => DropDown.handleClickOutside,
+	handleClickOutside: () => DropDown.handleClickOutside,
 };
 
 /**
