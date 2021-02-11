@@ -5,13 +5,13 @@ import PropTypes from "prop-types";
 /**
  * Renders a <Searchbar /> component
  * @component
- *	<Searchbar
- *		searchData={this.state.data}
- *		result={this.showResult}
- *		searchKeys={["firstName", "lastName", "gender", "university"]}
- *		query={this.showQuery}
- *		placeholder="Search..."
+ *	<SearchBar
+ *		searchData={data}
+ *		displayKey={displayKey}
+ *		searchKeys={searchKeys}
+ *		resultList={this.resultList}
  *		alignIcon="left"
+ *		result={result}
  *	/>
  */
 
@@ -102,6 +102,20 @@ SearchBar.propTypes = {
 	 * By default is "right"
 	 */
 	alignIcon: PropTypes.oneOf(["left", "right"]),
+	/**
+	 * The type of the displayKey must be a string. This prop is used when
+	 * SearchBar component is used with the DropDown component.
+	 */
+	displayKey: PropTypes.string,
+	/**
+	 * The type of the resultList must be a funciton. This prop is used when
+	 * SearchBar component is used with the DropDown component.
+	 */
+	resultList: PropTypes.func,
+	/**
+	 * The result type must funciton. It shows the result for the query.
+	 */
+	result: PropTypes.func.isRequired,
 };
 
 SearchBar.defaultProps = {

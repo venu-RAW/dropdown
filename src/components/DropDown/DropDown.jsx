@@ -1,9 +1,23 @@
 import React, { Component } from "react";
 import SearchBar from "../SearchBar/SearchBar";
-import onClickOutside from "react-onclickoutside";
-// import "./DropDown.css";
 import styles from "./DropDown.module.scss";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
+
+/**
+ * This package is used to handle the close of the dropdown when click outside of the component.
+ */
+import onClickOutside from "react-onclickoutside";
+
+/**
+ * Renders a <DropDown /> component
+ * @component
+ *	<DropDown
+ *		data={data}
+ *		displayKey="firstName"
+ *		searchKeys={["firstName", "lastName", "university"]}
+ *		result={this.showResult}
+ *	/>
+ */
 
 class DropDown extends Component {
 	state = {
@@ -19,12 +33,28 @@ class DropDown extends Component {
 		});
 	};
 
+	/**
+	 * @function resultList
+	 * @param resultArray
+	 * Sets resultArray inside state.
+	 */
+	resultList = (resultArray) => {
+		this.setState({
+			resultArray: [...resultArray],
+		});
+	};
+
+	/**
+	 * @function onClickHandler
+	 * @param value
+	 * Sets selectedValue inside state and the selectedValue value is passed to result().
+	 */
 	OnClickHandler = (value) => {
-		const { result } = this.props;
+		const { result, data } = this.props;
 		this.setState({
 			selectedValue: value,
+			resultArray: data,
 		});
-
 		result(value);
 	};
 
@@ -33,6 +63,10 @@ class DropDown extends Component {
 		const { data, searchKeys, prompt, displayKey, result } = this.props;
 		const listData = resultArray.length ? resultArray : data;
 
+		/**
+		 * @function handleClickOutside
+		 * Sets showDropDown inside state.
+		 */
 		DropDown.handleClickOutside = () => {
 			const { showDropDown } = this.state;
 			this.setState({
@@ -61,11 +95,7 @@ class DropDown extends Component {
 								searchData={data}
 								displayKey={displayKey}
 								searchKeys={searchKeys}
-								resultList={(resultArray) => {
-									this.setState({
-										resultArray: [...resultArray],
-									});
-								}}
+								resultList={this.resultList}
 								alignIcon="left"
 								result={result}
 							/>
@@ -96,8 +126,48 @@ class DropDown extends Component {
 	}
 }
 
-const outsideClickConfig = {
-	handleClickOutside: () => DropDown.handleClickOutside,
+DropDown.propTypes = {
+	/**
+	 * The data type must be an array of objects ( Required ).
+	 */
+	data: PropTypes.array.isRequired,
+	/**
+	 * The searchKeys type must be array of object keys.
+	 */
+	searchKeys: PropTypes.arrayOf(PropTypes.string),
+	/**
+	 * The promt type must be a string. It is like a placeholder for the dropdwon.
+	 */
+	promt: PropTypes.string,
+	/**
+	 * The alignIcon type must be a string ( left or right )
+	 * By default is "right"
+	 */
+	alignIcon: PropTypes.oneOf(["left", "right"]),
+	/**
+	 * The type of the displayKey must be a string. This prop is used when
+	 * SearchBar component is used with the DropDown component.
+	 */
+	displayKey: PropTypes.string,
+	/**
+	 * The result type must funciton. It shows the result for the query.
+	 */
+	result: PropTypes.func.isRequired,
 };
 
+DropDown.defaultProps = {
+	prompt: "Search",
+};
+
+/**
+ * @object outsideClickConfig
+ * This configuration object takes a key of handleCLickOutside which is set as a function that is been created  * before with the same name. This funciton is used for the processing of the outside the component click events.
+ */
+const outsideClickConfig = {
+	handleClickOutide: () => DropDown.handleClickOutside,
+};
+
+/**
+ * Wrap the DropDown component with the onOutsideClick Wrapper along with the configuration file.
+ */
 export default onClickOutside(DropDown, outsideClickConfig);
