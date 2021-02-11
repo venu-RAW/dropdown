@@ -1,12 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import styles from "./DropDown.module.scss";
 import PropTypes from "prop-types";
-
-/**
- * This package is used to handle the close of the dropdown when click outside of the component.
- */
-import onClickOutside from "react-onclickoutside";
 
 /**
  * Renders a <DropDown /> component
@@ -20,6 +15,11 @@ import onClickOutside from "react-onclickoutside";
  */
 
 class DropDown extends Component {
+	constructor(props) {
+		super(props);
+		this.div = createRef();
+	}
+
 	state = {
 		showDropDown: false,
 		selectedValue: null,
@@ -58,22 +58,33 @@ class DropDown extends Component {
 		result(value);
 	};
 
+	/**
+	 * @function closeDropDown
+	 * @param {Event} event
+	 * Sets selectedValue inside state and the selectedValue value is passed to result().
+	 */
+	closeDropDown = (event) => {
+		if (event.target.parentElement === this.div.current) {
+			return;
+		} else if (event.target.id === "root") {
+			this.setState({
+				showDropDown: false,
+			});
+		}
+	};
+
+	componentDidMount = () => {
+		document.addEventListener("click", this.closeDropDown);
+
+		return () => {
+			document.removeEventListener("click", this.closeDropDown);
+		};
+	};
+
 	render() {
 		const { showDropDown, selectedValue, resultArray } = this.state;
 		const { data, searchKeys, prompt, displayKey, result } = this.props;
 		const listData = resultArray.length ? resultArray : data;
-
-		/**
-		 * @function handleClickOutside
-		 * Sets showDropDown inside state.
-		 */
-		DropDown.handleClickOutside = () => {
-			const { showDropDown } = this.state;
-			this.setState({
-				showDropDown: !showDropDown,
-			});
-		};
-
 		return (
 			<>
 				<div className={styles.dropdown}>
@@ -81,7 +92,11 @@ class DropDown extends Component {
 						<div className={styles.selectedValue}>
 							<p>{selectedValue ? selectedValue[displayKey] : prompt}</p>
 						</div>
-						<div className={styles.arrow} onClick={this.toggle}>
+						<div
+							className={styles.arrow}
+							onClick={this.toggle}
+							ref={this.div}
+						>
 							<i
 								className={`fas fa-sort-${
 									showDropDown ? `up ${styles.up}` : "down"
@@ -90,7 +105,7 @@ class DropDown extends Component {
 						</div>
 					</div>
 					{showDropDown && (
-						<div className={styles.options}>
+						<div className={styles.options} tabIndex={0}>
 							<SearchBar
 								searchData={data}
 								displayKey={displayKey}
@@ -105,9 +120,11 @@ class DropDown extends Component {
 										tabIndex={0}
 										key={data.id}
 										className={styles.option}
-										onKeyPress={() => {
-											this.OnClickHandler(data);
-											this.toggle();
+										onKeyPress={(e) => {
+											if (e.key === "Enter") {
+												this.OnClickHandler(data);
+												this.toggle();
+											}
 										}}
 										onClick={() => {
 											this.OnClickHandler(data);
@@ -156,18 +173,7 @@ DropDown.propTypes = {
 };
 
 DropDown.defaultProps = {
-	prompt: "Search",
+	prompt: "Select",
 };
 
-/**
- * @object outsideClickConfig
- * This configuration object takes a key of handleCLickOutside which is set as a function that is been created  * before with the same name. This funciton is used for the processing of the outside the component click events.
- */
-const outsideClickConfig = {
-	handleClickOutside: () => DropDown.handleClickOutside,
-};
-
-/**
- * Wrap the DropDown component with the onOutsideClick Wrapper along with the configuration file.
- */
-export default onClickOutside(DropDown, outsideClickConfig);
+export default DropDown;

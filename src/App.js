@@ -32,7 +32,7 @@ class App extends Component {
 		return (
 			<DropDown
 				data={data}
-				displayKey="firstName"
+				displayKey="lastName"
 				searchKeys={["firstName", "lastName", "university"]}
 				result={this.showResult}
 			/>
