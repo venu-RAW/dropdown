@@ -4,7 +4,7 @@ import styles from "./DropDown.module.scss";
 import PropTypes from "prop-types";
 
 /**
- * Renders a <DropDown /> component
+ ** Renders a <DropDown /> component
  * @component
  *	<DropDown
  *		data={data}
@@ -15,10 +15,10 @@ import PropTypes from "prop-types";
  */
 
 class DropDown extends Component {
-	constructor(props) {
-		super(props);
-		this.div = createRef();
-	}
+	// constructor(props) {
+	// 	super(props);
+	// 	this.div = createRef();
+	// }
 
 	state = {
 		showDropDown: false,
@@ -36,7 +36,7 @@ class DropDown extends Component {
 	/**
 	 * @function resultList
 	 * @param resultArray
-	 * Sets resultArray inside state.
+	 ** Sets resultArray inside state.
 	 */
 	resultList = (resultArray) => {
 		this.setState({
@@ -47,7 +47,7 @@ class DropDown extends Component {
 	/**
 	 * @function onClickHandler
 	 * @param value
-	 * Sets selectedValue inside state and the selectedValue value is passed to result().
+	 ** Sets selectedValue inside state and the selectedValue value is passed to result().
 	 */
 	OnClickHandler = (value) => {
 		const { result, data } = this.props;
@@ -58,27 +58,44 @@ class DropDown extends Component {
 		result(value);
 	};
 
+	// /**
+	//  * @function closeDropDown
+	//  * @param {Event} event
+	//  * Sets selectedValue inside state and the selectedValue value is passed to result().
+	//  */
+	// closeDropDown = (event) => {
+	// 	// event.stopPropagation();
+	// 	if (event.target.parentElement === this.div.current) {
+	// 		return;
+	// 	} else if (event.target.id === "root") {
+	// 		this.setState({
+	// 			showDropDown: false,
+	// 		});
+	// 	}
+	// };
+
+	// componentDidMount = () => {
+	// 	window.addEventListener("click", this.closeDropDown);
+
+	// 	return () => {
+	// 		window.removeEventListener("click", this.closeDropDown);
+	// 	};
+	// };
+
 	/**
 	 * @function closeDropDown
 	 * @param {Event} event
-	 * Sets selectedValue inside state and the selectedValue value is passed to result().
+	 ** Sets selectedValue inside state and the selectedValue value is passed to result().
 	 */
 	closeDropDown = (event) => {
-		if (event.target.parentElement === this.div.current) {
-			return;
-		} else if (event.target.id === "root") {
+		if (
+			event.currentTarget.id === "dropdown" &&
+			!event.currentTarget.contains(event.relatedTarget)
+		) {
 			this.setState({
 				showDropDown: false,
 			});
 		}
-	};
-
-	componentDidMount = () => {
-		document.addEventListener("click", this.closeDropDown);
-
-		return () => {
-			document.removeEventListener("click", this.closeDropDown);
-		};
 	};
 
 	render() {
@@ -87,17 +104,26 @@ class DropDown extends Component {
 		const listData = resultArray.length ? resultArray : data;
 		return (
 			<>
-				<div className={styles.dropdown}>
-					<div className={styles.control}>
+				<div
+					id="dropdown"
+					data-test="dropdown"
+					className={styles.dropdown}
+					tabIndex={0}
+					onBlur={this.closeDropDown}
+				>
+					<div
+					        tabIndex={0}
+						data-test="control"
+						className={styles.control}
+						onClick={this.toggle}
+						// ref={this.div}
+					>
 						<div className={styles.selectedValue}>
 							<p>{selectedValue ? selectedValue[displayKey] : prompt}</p>
 						</div>
-						<div
-							className={styles.arrow}
-							onClick={this.toggle}
-							ref={this.div}
-						>
+						<div className={styles.arrow}>
 							<i
+								data-test="icon"
 								className={`fas fa-sort-${
 									showDropDown ? `up ${styles.up}` : "down"
 								}`}
@@ -111,30 +137,37 @@ class DropDown extends Component {
 								displayKey={displayKey}
 								searchKeys={searchKeys}
 								resultList={this.resultList}
-								alignIcon="left"
 								result={result}
+								alignIcon="left"
 							/>
-							{listData.map((data) => {
-								return (
-									<div
-										tabIndex={0}
-										key={data.id}
-										className={styles.option}
-										onKeyPress={(e) => {
-											if (e.key === "Enter") {
-												this.OnClickHandler(data);
-												this.toggle();
-											}
-										}}
-										onClick={() => {
+							{listData.map((data) => (
+								<div
+					                                 tabIndex={0}
+									data-test="option"
+									key={data.id}
+									onKeyPress={(e) => {
+										if (e.key === "Enter") {
 											this.OnClickHandler(data);
 											this.toggle();
-										}}
-									>
-										{data[displayKey]}
-									</div>
-								);
-							})}
+										} else {
+											return false;
+										}
+									}}
+									onClick={() => {
+										this.OnClickHandler(data);
+										this.toggle();
+									}}
+									className={`${styles.option} ${
+										styles[
+											this.state.selectedValue === data
+												? "isSelected"
+												: ""
+										]
+									}`}
+								>
+									{data[displayKey]}
+								</div>
+							))}
 						</div>
 					)}
 				</div>

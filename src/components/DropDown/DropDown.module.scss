@@ -6,6 +6,7 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	outline: none;
 	transform: translate(-50%, -50%);
 
 	.control {
@@ -45,7 +46,7 @@
 		border: 2px solid #ccc;
 		line-height: 1.5;
 		border-radius: 2px;
-		cursor: default;
+		cursor: pointer;
 		outline: none;
 		padding: 0.8rem 5.2rem 0.8rem 1.8rem;
 		transition: all 200ms ease;
@@ -59,23 +60,27 @@
 	.options {
 		margin-top: 1rem;
 		border: 2px solid #ccc;
-		box-sizing: border-box;
+		// box-sizing: border-box;
 		max-height: 28rem;
 		overflow-y: scroll;
 		padding: 0.8rem;
 		--webkit-overflow-scrolling: touch;
 
 		.option {
-			box-sizing: border-box;
 			color: rgba(51, 51, 51, 0.8);
 			cursor: pointer;
-			display: block;
 			padding: 8px 10px;
+			// box-sizing: border-box;
+			// display: block;
 
 			&:hover {
-				background-color: #f2f9fc;
+				background-color: #cce8f5;
 				color: #333;
 			}
 		}
 	}
+}
+
+.isSelected {
+	background-color: #cce8f5;
 }

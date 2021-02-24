@@ -40,7 +40,7 @@ class SearchBar extends Component {
 	 * @fires props.result
 	 */
 	searchResult = (searchInput) => {
-		let resultArray;
+		let resultArray = [];
 		const {
 			searchData,
 			searchKeys,
@@ -49,6 +49,7 @@ class SearchBar extends Component {
 			result,
 		} = this.props;
 
+		// if (searchInput.length)
 		searchKeys.forEach((key) => {
 			if (key === displayKey) {
 				resultArray = searchData.filter((data) =>
@@ -60,7 +61,9 @@ class SearchBar extends Component {
 				 */
 				return resultList(resultArray);
 			}
+			console.error("Keys are not same");
 		});
+
 		return result(resultArray);
 	};
 

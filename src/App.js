@@ -32,8 +32,9 @@ class App extends Component {
 		return (
 			<DropDown
 				data={data}
-				displayKey="lastName"
-				searchKeys={["firstName", "lastName", "university"]}
+				displayKey="firstName"
+				// searchKeys={["firstName", "lastName", "university"]}
+				searchKeys={["firstName"]}
 				result={this.showResult}
 			/>
 		);
